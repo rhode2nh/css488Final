@@ -1,21 +1,100 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <GL/gl.h>
+
+#include "Model.h"
+#include "Shader.h"
+#include "Camera.h"
+
 #include <iostream>
 
-const char *vertexShaderSource = "#version 330 core\n"
-    "layout (location = 0) in vec3 aPos;\n"
-    "void main()\n"
-    "{\n"
-    "    gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-    "}\0";
+void frame_buffer_size_callback(GLFWwindow* window, int width, int height);
+void mouse_callback(GLFWwindow* window, double xpos, double ypos);
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 
-const char *fragmentShaderSource = "#version 330 core\n"
-    "out vec4 FragColor;\n"
-    "void main()\n"
-    "{\n"
-    "   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
-    "}\n\0";
+GLFWwindow* setupWindow();
+void processInput(GLFWwindow *window, Camera &camera);
+
+struct MVP {
+    glm::mat4 model = glm::mat4(1.0);
+    glm::mat4 view = glm::mat4(1.0);
+    glm::mat4 projection = glm::mat4(1.0);
+};
+
+// settings
+const unsigned int SCR_WIDTH = 800;
+const unsigned int SCR_HEIGHT = 600;
+
+float deltaTime = 0.0f; // Time between current frame and last frame
+float lastFrame = 0.0f; // Time of last frame
+
+float lastX = SCR_WIDTH / 2, lastY = SCR_HEIGHT / 2;
+
+Camera camera;
+
+int main() {
+
+    // Setup window
+    GLFWwindow* window;
+    window = setupWindow();
+
+    Shader shader("../../src/Cube.vert", "../../src/Cube.frag");
+    Model model("../../models/house/house_obj.obj");
+    MVP mvp;
+
+    // Callbacks
+    glfwSetFramebufferSizeCallback(window, frame_buffer_size_callback);
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
+    glEnable(GL_DEPTH_TEST);
+    
+    glfwSetCursorPos(window, lastX, lastY);
+
+    shader.use();
+    shader.setInt("texture1", 0);
+    mvp.model = glm::scale(mvp.model, vec3(0.01f));
+
+
+    // Render Loop
+    while (!glfwWindowShouldClose(window)) {
+
+        // Clear depth buffer
+        glClear(GL_DEPTH_BUFFER_BIT);
+
+        // callbacks
+        glfwSetCursorPosCallback(window, mouse_callback);
+        glfwSetScrollCallback(window, scroll_callback);
+
+        // calculate deltatime
+        float currentFrame = glfwGetTime();
+        deltaTime = currentFrame - lastFrame;
+        lastFrame = currentFrame;
+
+        // Input
+        processInput(window, camera);
+        
+        // Rendering commands...
+        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        mvp.projection = glm::perspective(glm::radians(camera.fov), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+        mvp.view = camera.getCameraView();
+
+        shader.use();
+        shader.setMat4("model", mvp.model);
+        shader.setMat4("view", mvp.view);
+        shader.setMat4("projection", mvp.projection);
+
+        model.Draw(shader);
+
+        // Check and call events and swap buffers
+        glfwSwapBuffers(window);
+        glfwPollEvents();
+    }
+
+    glfwTerminate();
+    return 0;
+}
 
 void frame_buffer_size_callback(GLFWwindow* window, int width, int height) {
     glViewport(0, 0, width, height);
@@ -23,14 +102,33 @@ void frame_buffer_size_callback(GLFWwindow* window, int width, int height) {
     glClear(GL_COLOR_BUFFER_BIT);
 }
 
-void processInput(GLFWwindow *window) {
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-        glfwSetWindowShouldClose(window, true);
+void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
+    float xoffset = xpos - lastX;
+    float yoffset = ypos - lastY;
+    lastX = xpos;
+    lastY = ypos;
+
+    const float sensitivity = 0.05f;
+    xoffset *= sensitivity;
+    yoffset *= sensitivity;
+
+    camera.modifyYaw(xoffset);
+    camera.modifyPitch(yoffset);
+
+    glm::vec3 direction;
+    direction.x = cos(glm::radians(camera.yaw)) * cos(glm::radians(camera.pitch));
+    direction.y = sin(glm::radians(-camera.pitch));
+    direction.z = sin(glm::radians(camera.yaw)) * cos(glm::radians(camera.pitch));
+    camera.front = glm::normalize(direction);
 }
 
-int main() {
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
+    camera.modifyFov(yoffset);
+}
+
+GLFWwindow* setupWindow() {
     glfwInit();
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
@@ -39,120 +137,28 @@ int main() {
     if (window == NULL) {
         std::cout << "Failed to create GLFW window" << std::endl;
         glfwTerminate();
-        return -1;
+        return NULL;
     }
 
     glfwMakeContextCurrent(window);
 
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
         std::cout << "Failed to initialize GLAD" << std::endl;
-        return -1;
+        return NULL;
     }
+    return window;
+}
 
-    glfwSetFramebufferSizeCallback(window, frame_buffer_size_callback);
-
-    // build and compile shader program
-    // --------------------------------
-    // Compile vertex shader
-    unsigned int vertexShader;
-    vertexShader = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-    glCompileShader(vertexShader);
-
-    // Compile fragment shader
-    unsigned int fragmentShader;
-    fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
-    glCompileShader(fragmentShader);
-
-    // Link shaders together
-    unsigned int shaderProgram;
-    shaderProgram = glCreateProgram();
-    glAttachShader(shaderProgram, vertexShader);
-    glAttachShader(shaderProgram, fragmentShader);
-    glLinkProgram(shaderProgram);
-
-    // set up vertex data (and buffers(s)) and configure vertex attributes
-    // -------------------------------------------------------------------
-    float firstTriangle[] = {
-         0.5f,  0.5f, 0.0f, // top right
-         0.5f, -0.5f, 0.0f, // bottom right
-        -0.5f, -0.5f, 0.0f, // bottom left
-        -0.5f,  0.5f, 0.0f, // top left
-    };
-
-        float secondTriangle[] = {
-          0.6f, -0.6f, 0.0f, // top right
-         -0.6f,  0.6f, 0.0f, // bottom right
-          0.6f,  0.6f, 0.0f, // bottom left
-          0.6f, -0.6f, 0.0f, // top left
-    };
-
-    // unsigned int indices[] = {
-    //     0, 1, 3,
-    // };
-
-    unsigned int VBO[2], VAO[2];
-    glGenVertexArrays(2, VAO);
-    glGenBuffers(2, VBO);
-
-    // bind the vertex array first, then bind and set vertex buffer(s)
-    glBindVertexArray(VAO[0]);
-
-    // bind the VBO and copy vertex data
-    glBindBuffer(GL_ARRAY_BUFFER, VBO[0]);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(firstTriangle), firstTriangle, GL_STATIC_DRAW);
-
-    // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    // glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
-    glEnableVertexAttribArray(0);
-
-    //-------------------------------------------------
-
-    glBindVertexArray(VAO[1]);
-
-    glBindBuffer(GL_ARRAY_BUFFER, VBO[1]);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(secondTriangle), secondTriangle, GL_STATIC_DRAW);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
-    glEnableVertexAttribArray(0);
-
-    // glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-    // glBindVertexArray(0);
-
-    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-
-    // Render Loop
-    while (!glfwWindowShouldClose(window)) {
-
-        // Input
-        processInput(window);
-        
-        // Rendering commands...
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
-
-        glUseProgram(shaderProgram);
-
-        glBindVertexArray(VAO[0]);
-        // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-        // glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
-        glDrawArrays(GL_TRIANGLES, 0, 3);
-
-        glBindVertexArray(VAO[1]);
-        glDrawArrays(GL_TRIANGLES, 0, 3);
-
-        // Check and call events and swap buffers
-        glfwSwapBuffers(window);
-        glfwPollEvents();
-    }
-
-    // Delete Shaders
-    glDeleteShader(vertexShader);
-    glDeleteShader(fragmentShader);
-
-    glfwTerminate();
-    return 0;
+void processInput(GLFWwindow *window, Camera &camera) {
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+        glfwSetWindowShouldClose(window, true);
+    const float cameraSpeed = 2.5f * deltaTime;
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+        camera.moveForward(cameraSpeed);
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+        camera.moveBackward(cameraSpeed);
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+        camera.moveLeft(cameraSpeed);
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+        camera.moveRight(cameraSpeed);
 }

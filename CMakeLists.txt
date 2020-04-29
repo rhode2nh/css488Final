@@ -10,6 +10,8 @@ include_directories(include)
 include_directories(${GLFW_INCLUDE_DIRS})
 include_directories(${OPENGL_INCLUDE_DIR})
 
+link_directories(/usr/local/lib/assimp)
+
 
 #wildcard
 file(GLOB SOURCES "src/*.cpp" "src/*.c")
@@ -21,5 +23,6 @@ link_directories(/usr/local/lib)
 target_link_libraries(
     ${PROJECT_NAME}
     glfw
+    -lassimp
     ${CMAKE_DL_LIBS}
     ${OPEN_gl_LIBRARIES} )
