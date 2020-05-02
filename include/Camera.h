@@ -6,7 +6,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #define MIN_FOV 1.0f
-#define MAX_FOV 120.0f
+#define MAX_FOV 200.0f
 
 #define MIN_PITCH -89.0f
 #define MAX_PITCH 89.0f

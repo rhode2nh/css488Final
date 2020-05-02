@@ -20,11 +20,12 @@ struct MVP {
     glm::mat4 model = glm::mat4(1.0f);
     glm::mat4 view = glm::mat4(1.0f);
     glm::mat4 projection = glm::mat4(1.0f);
+    glm::mat4 mvp = glm::mat4(1.0f);
 };
 
 // settings
-const unsigned int SCR_WIDTH = 800;
-const unsigned int SCR_HEIGHT = 600;
+const unsigned int SCR_WIDTH = 1280;
+const unsigned int SCR_HEIGHT = 720;
 
 float deltaTime = 0.0f; // Time between current frame and last frame
 float lastFrame = 0.0f; // Time of last frame
@@ -56,7 +57,7 @@ int main() {
     GLuint texture;
     glGenTextures(1, &texture);
     glBindTexture(GL_TEXTURE_2D, texture);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, SCR_WIDTH / 2, SCR_HEIGHT / 2, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);    
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, SCR_WIDTH, SCR_HEIGHT, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);    
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
@@ -75,15 +76,16 @@ int main() {
         std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << std::endl;
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
+
     float quadVertices[] = { // vertex attributes for a quad that fills the entire screen in Normalized Device Coordinates.
         // positions        // texCoords
-        -1.0f,  1.0f, 0.0f, 0.0f, 1.0f,
-        -1.0f, -1.0f, 0.0f, 0.0f, 0.0f,
-         1.0f, -1.0f, 0.0f, 1.0f, 0.0f,
+        -1.78f,  1.0f, 0.0f, 0.0f, 1.0f,
+        -1.78f, -1.0f, 0.0f, 0.0f, 0.0f,
+         1.78f, -1.0f, 0.0f, 1.0f, 0.0f,
 
-        -1.0f,  1.0f, 0.0f, 0.0f, 1.0f,
-         1.0f, -1.0f, 0.0f, 1.0f, 0.0f,
-         1.0f,  1.0f, 0.0f, 1.0f, 1.0f
+        -1.78f,  1.0f, 0.0f, 0.0f, 1.0f,
+         1.78f, -1.0f, 0.0f, 1.0f, 0.0f,
+         1.78f,  1.0f, 0.0f, 1.0f, 1.0f
     };
 
     GLuint quadVAO, VBO;
@@ -109,10 +111,13 @@ int main() {
 
     shader.use();
     shader.setInt("texture1", 0);
-    mvp.model = glm::scale(mvp.model, vec3(0.01f));
-    mvp.model = glm::translate(mvp.model, glm::vec3(0.0f, -200.0f, -600.0f));
 
     glEnable(GL_DEPTH_TEST);
+
+    portalCamera->pos = camera.pos;
+    portalCamera->fov = camera.fov;
+
+    // portalCamera->modifyFov(50.0f);
 
     // Render Loop
     while (!glfwWindowShouldClose(window)) {
@@ -126,19 +131,19 @@ int main() {
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
 
-        // Input
-        processInput(window, camera);
-
-        // first pass
+                // first pass
         glBindFramebuffer(GL_FRAMEBUFFER, fbo);
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glEnable(GL_DEPTH_TEST);
 
+        processPortalPerspective(window, *portalCamera);
+        portalCamera->pos = camera.pos;
+        portalCamera->fov = camera.fov;
         mvp.model = glm::mat4(1.0f);
         mvp.model = glm::scale(mvp.model, glm::vec3(0.01f));
-        mvp.model = glm::translate(mvp.model, glm::vec3(0.0f, -200.0f, -600.0f));
-        mvp.projection = glm::perspective(glm::radians(camera.fov), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+        mvp.model = glm::translate(mvp.model, glm::vec3(0.0f, -300.0f, -800.0f));
+        mvp.projection = glm::perspective(glm::radians(portalCamera->fov), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
         mvp.view = portalCamera->getCameraView();
 
         shader.use();
@@ -148,14 +153,18 @@ int main() {
         model.Draw(shader);
 
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
-        // glDisable(GL_DEPTH_TEST);
+        // Input
+        processInput(window, camera);
+
+
+        glDisable(GL_DEPTH_TEST);
 
         glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         screenShader.use();
         mvp.model = glm::mat4(1.0f);
-        mvp.projection = glm::perspective(glm::radians(camera.fov), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+        mvp.projection = glm::perspective(glm::radians((camera.fov)), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
         mvp.view = camera.getCameraView();
         screenShader.setMat4("model", mvp.model);
         screenShader.setMat4("view", mvp.view);
@@ -191,12 +200,15 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
 
     camera.modifyYaw(xoffset);
     camera.modifyPitch(yoffset);
+    portalCamera->modifyYaw(xoffset);
+    portalCamera->modifyPitch(yoffset);
 
     glm::vec3 direction;
     direction.x = cos(glm::radians(camera.yaw)) * cos(glm::radians(camera.pitch));
     direction.y = sin(glm::radians(-camera.pitch));
     direction.z = sin(glm::radians(camera.yaw)) * cos(glm::radians(camera.pitch));
     camera.front = glm::normalize(direction);
+    portalCamera->front = glm::normalize(direction);
 }
 
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
@@ -210,7 +222,7 @@ GLFWwindow* setupWindow() {
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
-    GLFWwindow* window = glfwCreateWindow(800, 600, "LearnOpenGL", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL", NULL, NULL);
     if (window == NULL) {
         std::cout << "Failed to create GLFW window" << std::endl;
         glfwTerminate();
@@ -242,10 +254,12 @@ void processInput(GLFWwindow *window, Camera &camera) {
 
 void processPortalPerspective(GLFWwindow *window, Camera &portalCamera) {
     const float cameraSpeed = 2.5f * deltaTime;
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
         portalCamera.moveForward(cameraSpeed);
-    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+    }
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
         portalCamera.moveBackward(cameraSpeed);
+    }
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
         portalCamera.moveLeft(cameraSpeed);
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)

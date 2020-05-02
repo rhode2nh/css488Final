@@ -1,0 +1,26 @@
+Detecting C [-std=c11] compiler features failed to compile with the following output:
+Change Dir: /home/wannabuh/Workspaces/C_Workspaces/cs488/learnOpenGL/build/2020-04-08:16:37/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_c1c0f/fast"
+/usr/bin/make -f CMakeFiles/cmTC_c1c0f.dir/build.make CMakeFiles/cmTC_c1c0f.dir/build
+make[1]: Entering directory '/home/wannabuh/Workspaces/C_Workspaces/cs488/learnOpenGL/build/2020-04-08:16:37/CMakeFiles/CMakeTmp'
+CMakeFiles/cmTC_c1c0f.dir/build.make:64: *** target pattern contains no '%'.  Stop.
+make[1]: Leaving directory '/home/wannabuh/Workspaces/C_Workspaces/cs488/learnOpenGL/build/2020-04-08:16:37/CMakeFiles/CMakeTmp'
+Makefile:121: recipe for target 'cmTC_c1c0f/fast' failed
+make: *** [cmTC_c1c0f/fast] Error 2
+
+
+
+Detecting CXX [-std=c++1z] compiler features failed to compile with the following output:
+Change Dir: /home/wannabuh/Workspaces/C_Workspaces/cs488/learnOpenGL/build/2020-04-08:16:37/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_f646f/fast"
+/usr/bin/make -f CMakeFiles/cmTC_f646f.dir/build.make CMakeFiles/cmTC_f646f.dir/build
+make[1]: Entering directory '/home/wannabuh/Workspaces/C_Workspaces/cs488/learnOpenGL/build/2020-04-08:16:37/CMakeFiles/CMakeTmp'
+CMakeFiles/cmTC_f646f.dir/build.make:64: *** target pattern contains no '%'.  Stop.
+make[1]: Leaving directory '/home/wannabuh/Workspaces/C_Workspaces/cs488/learnOpenGL/build/2020-04-08:16:37/CMakeFiles/CMakeTmp'
+Makefile:121: recipe for target 'cmTC_f646f/fast' failed
+make: *** [cmTC_f646f/fast] Error 2
+
+
+
