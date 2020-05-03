@@ -45,6 +45,7 @@ int main() {
     Shader shader("../../src/Cube.vert", "../../src/Cube.frag");
     Shader screenShader("../../src/screenShader.vert", "../../src/screenShader.frag");
     Model model("../../models/house/house_obj.obj");
+    glm::vec2 uv = glm::vec2(1.0f / (float)SCR_WIDTH, 1.0f / (float)SCR_HEIGHT);
     MVP mvp;
 
     // framebuffer
@@ -78,14 +79,14 @@ int main() {
 
 
     float quadVertices[] = { // vertex attributes for a quad that fills the entire screen in Normalized Device Coordinates.
-        // positions        // texCoords
-        -1.78f,  1.0f, 0.0f, 0.0f, 1.0f,
-        -1.78f, -1.0f, 0.0f, 0.0f, 0.0f,
-         1.78f, -1.0f, 0.0f, 1.0f, 0.0f,
+        // positions
+        -1.78f,  1.0f, 0.0f,
+        -1.78f, -1.0f, 0.0f,
+         1.78f, -1.0f, 0.0f,
 
-        -1.78f,  1.0f, 0.0f, 0.0f, 1.0f,
-         1.78f, -1.0f, 0.0f, 1.0f, 0.0f,
-         1.78f,  1.0f, 0.0f, 1.0f, 1.0f
+        -1.78f,  1.0f, 0.0f,
+         1.78f, -1.0f, 0.0f,
+         1.78f,  1.0f, 0.0f
     };
 
     GLuint quadVAO, VBO;
@@ -94,14 +95,16 @@ int main() {
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), &quadVertices, GL_STATIC_DRAW);
     glBindVertexArray(quadVAO);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *)(3 *sizeof(float)));
-    glEnableVertexAttribArray(1);
 
     // Shader configuration
     screenShader.use();
     screenShader.setInt("screenTexture", 0);
+    screenShader.setVec2("uv", uv);
+
+    shader.use();
+    shader.setInt("texture1", 0);
     // -----------------------------------------------------------
 
     // Callbacks
@@ -109,15 +112,7 @@ int main() {
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     glfwSetCursorPos(window, lastX, lastY);    
 
-    shader.use();
-    shader.setInt("texture1", 0);
-
     glEnable(GL_DEPTH_TEST);
-
-    portalCamera->pos = camera.pos;
-    portalCamera->fov = camera.fov;
-
-    // portalCamera->modifyFov(50.0f);
 
     // Render Loop
     while (!glfwWindowShouldClose(window)) {
@@ -131,7 +126,7 @@ int main() {
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
 
-                // first pass
+        // first pass
         glBindFramebuffer(GL_FRAMEBUFFER, fbo);
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -147,28 +142,27 @@ int main() {
         mvp.view = portalCamera->getCameraView();
 
         shader.use();
-        shader.setMat4("model", mvp.model);
-        shader.setMat4("view", mvp.view);
-        shader.setMat4("projection", mvp.projection);
+        mvp.mvp = mvp.projection * mvp.view * mvp.model;
+        shader.setMat4("mvp", mvp.mvp);
         model.Draw(shader);
 
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
         // Input
         processInput(window, camera);
 
-
         glDisable(GL_DEPTH_TEST);
 
-        glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+        glClearColor(1.0f, 0.5f, 0.2f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         screenShader.use();
         mvp.model = glm::mat4(1.0f);
         mvp.projection = glm::perspective(glm::radians((camera.fov)), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
         mvp.view = camera.getCameraView();
-        screenShader.setMat4("model", mvp.model);
-        screenShader.setMat4("view", mvp.view);
-        screenShader.setMat4("projection", mvp.projection);
+        mvp.mvp = mvp.projection * mvp.view * mvp.model;
+        screenShader.use();
+        screenShader.setMat4("mvp", mvp.mvp);
         glBindVertexArray(quadVAO);
         glBindTexture(GL_TEXTURE_2D, texture);
         glDrawArrays(GL_TRIANGLES, 0, 6);

@@ -1,14 +1,10 @@
 #version 330 core
 out vec4 FragColor;
 
-in vec2 TexCoords;
-
 uniform sampler2D screenTexture;
+uniform vec2 uv;
 
 void main() {
-    // vec2 uv;
-    // uv.x = gl_FragCoord.x / 1280;
-    // uv.y = gl_FragCoord.y / 720;
-    // FragColor = texture(screenTexture, uv);
-    FragColor = texture(screenTexture, TexCoords);
+    vec2 uvTex = uv.xy * gl_FragCoord.xy;
+    FragColor = texture(screenTexture, uvTex);
 }
