@@ -1,1 +1,0 @@
-/usr/bin/c++     CMakeFiles/test.dir/src/Camera.cpp.o CMakeFiles/test.dir/src/Mesh.cpp.o CMakeFiles/test.dir/src/Model.cpp.o CMakeFiles/test.dir/src/glad.c.o CMakeFiles/test.dir/src/main.cpp.o CMakeFiles/test.dir/src/test.cpp.o  -o test  -L/usr/local/lib/assimp -Wl,-rpath,/usr/local/lib/assimp -lglfw -lassimp -ldl 

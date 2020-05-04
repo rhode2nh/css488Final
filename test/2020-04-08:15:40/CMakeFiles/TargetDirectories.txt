@@ -1,3 +1,0 @@
-/home/wannabuh/Workspaces/C_Workspaces/cs488/learnOpenGL/build/2020-04-08:15:40/CMakeFiles/rebuild_cache.dir
-/home/wannabuh/Workspaces/C_Workspaces/cs488/learnOpenGL/build/2020-04-08:15:40/CMakeFiles/test.dir
-/home/wannabuh/Workspaces/C_Workspaces/cs488/learnOpenGL/build/2020-04-08:15:40/CMakeFiles/edit_cache.dir

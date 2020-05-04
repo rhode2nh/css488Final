@@ -1,1 +1,0 @@
-/usr/bin/c++     CMakeFiles/test.dir/src/glad.c.o CMakeFiles/test.dir/src/test.cpp.o  -o test -lglfw -ldl 
