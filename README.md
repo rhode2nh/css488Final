@@ -47,6 +47,11 @@ sudo make install -j4
 sudo apt-get install libglew-dev
 ```
 
+#### GLFW
+
+```
+sudo apt-get install libglfw3 libglfw3-dev libglfw3-doc 
+```
 
 All of the other required headers are located in the include directory.
 
