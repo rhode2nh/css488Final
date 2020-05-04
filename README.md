@@ -1,4 +1,4 @@
-# CS488 Final Portal Project
+# CS488 Final Project
 
 This is my final project for CS488 - Computer Graphics. It is a small program that simulates non-euclidean geometry with the use of portals.
 
