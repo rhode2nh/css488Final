@@ -12,6 +12,7 @@ set(CMAKE_C_COMPILER_ID "GNU")
 # The include file search paths:
 set(CMAKE_C_TARGET_INCLUDE_PATH
   "../../include"
+  "/usr/local/include/assimp"
   )
 set(CMAKE_DEPENDS_CHECK_CXX
   "/home/wannabuh/Workspaces/C_Workspaces/cs488/final/src/Camera.cpp" "/home/wannabuh/Workspaces/C_Workspaces/cs488/final/build/final/CMakeFiles/final.dir/src/Camera.cpp.o"
@@ -24,6 +25,7 @@ set(CMAKE_CXX_COMPILER_ID "GNU")
 # The include file search paths:
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
   "../../include"
+  "/usr/local/include/assimp"
   )
 
 # Targets to which this target links.

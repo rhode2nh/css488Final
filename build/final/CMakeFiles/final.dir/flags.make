@@ -7,11 +7,11 @@ C_FLAGS =
 
 C_DEFINES = 
 
-C_INCLUDES = -I/home/wannabuh/Workspaces/C_Workspaces/cs488/final/include 
+C_INCLUDES = -I/home/wannabuh/Workspaces/C_Workspaces/cs488/final/include -I/usr/local/include/assimp 
 
 CXX_FLAGS =  
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/home/wannabuh/Workspaces/C_Workspaces/cs488/final/include 
+CXX_INCLUDES = -I/home/wannabuh/Workspaces/C_Workspaces/cs488/final/include -I/usr/local/include/assimp 
 

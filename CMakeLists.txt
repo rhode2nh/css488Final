@@ -10,15 +10,13 @@ include_directories(include)
 include_directories(${GLFW_INCLUDE_DIRS})
 include_directories(${OPENGL_INCLUDE_DIR})
 
-link_directories(/usr/local/lib/assimp)
-
+include_directories(/usr/local/include/assimp)
+link_directories(/usr/local/lib)
 
 #wildcard
 file(GLOB SOURCES "src/*.cpp" "src/*.c")
 
 add_executable(${PROJECT_NAME} ${SOURCES})
-
-link_directories(/usr/local/lib)
 
 target_link_libraries(
     ${PROJECT_NAME}
