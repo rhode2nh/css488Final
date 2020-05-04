@@ -1,5 +1,3 @@
-
-
 #ifndef SHADER_H
 #define SHADER_H
 
@@ -11,8 +9,7 @@
 #include <sstream>
 #include <iostream>
 
-class Shader
-{
+class Shader {
 public:
     unsigned int ID;
     // constructor generates the shader on the fly
