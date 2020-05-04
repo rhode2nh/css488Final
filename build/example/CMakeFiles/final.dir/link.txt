@@ -1,1 +1,0 @@
-/usr/bin/c++     CMakeFiles/final.dir/src/Camera.cpp.o CMakeFiles/final.dir/src/Mesh.cpp.o CMakeFiles/final.dir/src/Model.cpp.o CMakeFiles/final.dir/src/glad.c.o CMakeFiles/final.dir/src/main.cpp.o  -o final  -L/usr/local/lib -Wl,-rpath,/usr/local/lib -lglfw -lassimp -ldl 

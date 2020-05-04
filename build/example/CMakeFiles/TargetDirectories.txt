@@ -1,3 +1,0 @@
-/home/wannabuh/Workspaces/C_Workspaces/cs488/final/build/example/CMakeFiles/rebuild_cache.dir
-/home/wannabuh/Workspaces/C_Workspaces/cs488/final/build/example/CMakeFiles/final.dir
-/home/wannabuh/Workspaces/C_Workspaces/cs488/final/build/example/CMakeFiles/edit_cache.dir
