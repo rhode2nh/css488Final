@@ -4,7 +4,7 @@ This is my final project for CS488 - Computer Graphics. It is a small program th
 
 ## Getting Started
 
-These instructions will show you how to get this project up and running on your machine. **This has only been tested in Linux Mint.**
+These instructions will show you how to get this project up and running on your machine. **This has only been tested in a Linux Mint environment.**
 
 ### Prerequisites
 
@@ -26,7 +26,7 @@ sudo apt-get install libboost-all-dev
 
 Assimp is an open source model loading library that supports over 40+ formats. 
 It is recommended to build assimp from source. 
-First, run this command:
+First, clone the repository:
 
 ```
 git clone https://github.com/assimp/assimp.git
