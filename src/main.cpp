@@ -42,8 +42,8 @@ int main() {
     window = setupWindow();
 
     // setup shaders and vars
-    Shader shader("../../src/Cube.vert", "../../src/Cube.frag");
-    Shader screenShader("../../src/screenShader.vert", "../../src/screenShader.frag");
+    Shader playerShader("../../src/playerShader.vert", "../../src/playerShader.frag");
+    Shader portalShader("../../src/portalShader.vert", "../../src/portalShader.frag");
     Model model("../../models/house/house_obj.obj");
     glm::vec2 uv = glm::vec2(1.0f / (float)SCR_WIDTH, 1.0f / (float)SCR_HEIGHT);
     MVP mvp;
@@ -78,8 +78,8 @@ int main() {
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 
-    float quadVertices[] = { // vertex attributes for a quad that fills the entire screen in Normalized Device Coordinates.
-        // positions
+    // Quad that will be used as the portal
+    float quadVertices[] = {
         -1.78f,  1.0f, 0.0f,
         -1.78f, -1.0f, 0.0f,
          1.78f, -1.0f, 0.0f,
@@ -99,12 +99,12 @@ int main() {
     glEnableVertexAttribArray(0);
 
     // Shader configuration
-    screenShader.use();
-    screenShader.setInt("screenTexture", 0);
-    screenShader.setVec2("uv", uv);
+    portalShader.use();
+    portalShader.setInt("screenTexture", 0);
+    portalShader.setVec2("uv", uv);
 
-    shader.use();
-    shader.setInt("texture1", 0);
+    playerShader.use();
+    playerShader.setInt("texture1", 0);
     // -----------------------------------------------------------
 
     // Callbacks
@@ -126,7 +126,8 @@ int main() {
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
 
-        // first pass
+        // Render the "portal's" view first
+        //--------------------------------------------------------------------------------
         glBindFramebuffer(GL_FRAMEBUFFER, fbo);
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -135,20 +136,25 @@ int main() {
         processPortalPerspective(window, *portalCamera);
         portalCamera->pos = camera.pos;
         portalCamera->fov = camera.fov;
+
+        // scale and translate model
         mvp.model = glm::mat4(1.0f);
         mvp.model = glm::scale(mvp.model, glm::vec3(0.01f));
         mvp.model = glm::translate(mvp.model, glm::vec3(0.0f, -300.0f, -800.0f));
         mvp.projection = glm::perspective(glm::radians(portalCamera->fov), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
         mvp.view = portalCamera->getCameraView();
 
-        shader.use();
+        playerShader.use();
         mvp.mvp = mvp.projection * mvp.view * mvp.model;
-        shader.setMat4("mvp", mvp.mvp);
-        model.Draw(shader);
+        playerShader.setMat4("mvp", mvp.mvp);
+        model.Draw(playerShader);
 
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        
+        // Render the player's perspective
+        //--------------------------------------------------------------------------------
 
-        // Input
+        // Process input
         processInput(window, camera);
 
         glDisable(GL_DEPTH_TEST);
@@ -156,13 +162,15 @@ int main() {
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        screenShader.use();
+        portalShader.use();
         mvp.model = glm::mat4(1.0f);
         mvp.projection = glm::perspective(glm::radians((camera.fov)), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
         mvp.view = camera.getCameraView();
         mvp.mvp = mvp.projection * mvp.view * mvp.model;
-        screenShader.use();
-        screenShader.setMat4("mvp", mvp.mvp);
+        portalShader.use();
+        portalShader.setMat4("mvp", mvp.mvp);
+
+        // Render the portal in the player's view
         glBindVertexArray(quadVAO);
         glBindTexture(GL_TEXTURE_2D, texture);
         glDrawArrays(GL_TRIANGLES, 0, 6);

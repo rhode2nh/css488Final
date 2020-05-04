@@ -111,17 +111,17 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named test
+# Target rules for targets named final
 
 # Build rule for target.
-test: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 test
-.PHONY : test
+final: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 final
+.PHONY : final
 
 # fast build rule for target.
-test/fast:
-	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/build
-.PHONY : test/fast
+final/fast:
+	$(MAKE) -f CMakeFiles/final.dir/build.make CMakeFiles/final.dir/build
+.PHONY : final/fast
 
 src/Camera.o: src/Camera.cpp.o
 
@@ -129,7 +129,7 @@ src/Camera.o: src/Camera.cpp.o
 
 # target to build an object file
 src/Camera.cpp.o:
-	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/Camera.cpp.o
+	$(MAKE) -f CMakeFiles/final.dir/build.make CMakeFiles/final.dir/src/Camera.cpp.o
 .PHONY : src/Camera.cpp.o
 
 src/Camera.i: src/Camera.cpp.i
@@ -138,7 +138,7 @@ src/Camera.i: src/Camera.cpp.i
 
 # target to preprocess a source file
 src/Camera.cpp.i:
-	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/Camera.cpp.i
+	$(MAKE) -f CMakeFiles/final.dir/build.make CMakeFiles/final.dir/src/Camera.cpp.i
 .PHONY : src/Camera.cpp.i
 
 src/Camera.s: src/Camera.cpp.s
@@ -147,7 +147,7 @@ src/Camera.s: src/Camera.cpp.s
 
 # target to generate assembly for a file
 src/Camera.cpp.s:
-	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/Camera.cpp.s
+	$(MAKE) -f CMakeFiles/final.dir/build.make CMakeFiles/final.dir/src/Camera.cpp.s
 .PHONY : src/Camera.cpp.s
 
 src/Mesh.o: src/Mesh.cpp.o
@@ -156,7 +156,7 @@ src/Mesh.o: src/Mesh.cpp.o
 
 # target to build an object file
 src/Mesh.cpp.o:
-	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/Mesh.cpp.o
+	$(MAKE) -f CMakeFiles/final.dir/build.make CMakeFiles/final.dir/src/Mesh.cpp.o
 .PHONY : src/Mesh.cpp.o
 
 src/Mesh.i: src/Mesh.cpp.i
@@ -165,7 +165,7 @@ src/Mesh.i: src/Mesh.cpp.i
 
 # target to preprocess a source file
 src/Mesh.cpp.i:
-	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/Mesh.cpp.i
+	$(MAKE) -f CMakeFiles/final.dir/build.make CMakeFiles/final.dir/src/Mesh.cpp.i
 .PHONY : src/Mesh.cpp.i
 
 src/Mesh.s: src/Mesh.cpp.s
@@ -174,7 +174,7 @@ src/Mesh.s: src/Mesh.cpp.s
 
 # target to generate assembly for a file
 src/Mesh.cpp.s:
-	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/Mesh.cpp.s
+	$(MAKE) -f CMakeFiles/final.dir/build.make CMakeFiles/final.dir/src/Mesh.cpp.s
 .PHONY : src/Mesh.cpp.s
 
 src/Model.o: src/Model.cpp.o
@@ -183,7 +183,7 @@ src/Model.o: src/Model.cpp.o
 
 # target to build an object file
 src/Model.cpp.o:
-	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/Model.cpp.o
+	$(MAKE) -f CMakeFiles/final.dir/build.make CMakeFiles/final.dir/src/Model.cpp.o
 .PHONY : src/Model.cpp.o
 
 src/Model.i: src/Model.cpp.i
@@ -192,7 +192,7 @@ src/Model.i: src/Model.cpp.i
 
 # target to preprocess a source file
 src/Model.cpp.i:
-	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/Model.cpp.i
+	$(MAKE) -f CMakeFiles/final.dir/build.make CMakeFiles/final.dir/src/Model.cpp.i
 .PHONY : src/Model.cpp.i
 
 src/Model.s: src/Model.cpp.s
@@ -201,7 +201,7 @@ src/Model.s: src/Model.cpp.s
 
 # target to generate assembly for a file
 src/Model.cpp.s:
-	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/Model.cpp.s
+	$(MAKE) -f CMakeFiles/final.dir/build.make CMakeFiles/final.dir/src/Model.cpp.s
 .PHONY : src/Model.cpp.s
 
 src/glad.o: src/glad.c.o
@@ -210,7 +210,7 @@ src/glad.o: src/glad.c.o
 
 # target to build an object file
 src/glad.c.o:
-	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/glad.c.o
+	$(MAKE) -f CMakeFiles/final.dir/build.make CMakeFiles/final.dir/src/glad.c.o
 .PHONY : src/glad.c.o
 
 src/glad.i: src/glad.c.i
@@ -219,7 +219,7 @@ src/glad.i: src/glad.c.i
 
 # target to preprocess a source file
 src/glad.c.i:
-	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/glad.c.i
+	$(MAKE) -f CMakeFiles/final.dir/build.make CMakeFiles/final.dir/src/glad.c.i
 .PHONY : src/glad.c.i
 
 src/glad.s: src/glad.c.s
@@ -228,7 +228,7 @@ src/glad.s: src/glad.c.s
 
 # target to generate assembly for a file
 src/glad.c.s:
-	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/glad.c.s
+	$(MAKE) -f CMakeFiles/final.dir/build.make CMakeFiles/final.dir/src/glad.c.s
 .PHONY : src/glad.c.s
 
 src/main.o: src/main.cpp.o
@@ -237,7 +237,7 @@ src/main.o: src/main.cpp.o
 
 # target to build an object file
 src/main.cpp.o:
-	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/main.cpp.o
+	$(MAKE) -f CMakeFiles/final.dir/build.make CMakeFiles/final.dir/src/main.cpp.o
 .PHONY : src/main.cpp.o
 
 src/main.i: src/main.cpp.i
@@ -246,7 +246,7 @@ src/main.i: src/main.cpp.i
 
 # target to preprocess a source file
 src/main.cpp.i:
-	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/main.cpp.i
+	$(MAKE) -f CMakeFiles/final.dir/build.make CMakeFiles/final.dir/src/main.cpp.i
 .PHONY : src/main.cpp.i
 
 src/main.s: src/main.cpp.s
@@ -255,35 +255,8 @@ src/main.s: src/main.cpp.s
 
 # target to generate assembly for a file
 src/main.cpp.s:
-	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/main.cpp.s
+	$(MAKE) -f CMakeFiles/final.dir/build.make CMakeFiles/final.dir/src/main.cpp.s
 .PHONY : src/main.cpp.s
-
-src/test.o: src/test.cpp.o
-
-.PHONY : src/test.o
-
-# target to build an object file
-src/test.cpp.o:
-	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/test.cpp.o
-.PHONY : src/test.cpp.o
-
-src/test.i: src/test.cpp.i
-
-.PHONY : src/test.i
-
-# target to preprocess a source file
-src/test.cpp.i:
-	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/test.cpp.i
-.PHONY : src/test.cpp.i
-
-src/test.s: src/test.cpp.s
-
-.PHONY : src/test.s
-
-# target to generate assembly for a file
-src/test.cpp.s:
-	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/test.cpp.s
-.PHONY : src/test.cpp.s
 
 # Help Target
 help:
@@ -292,7 +265,7 @@ help:
 	@echo "... clean"
 	@echo "... depend"
 	@echo "... rebuild_cache"
-	@echo "... test"
+	@echo "... final"
 	@echo "... edit_cache"
 	@echo "... src/Camera.o"
 	@echo "... src/Camera.i"
@@ -309,9 +282,6 @@ help:
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
-	@echo "... src/test.o"
-	@echo "... src/test.i"
-	@echo "... src/test.s"
 .PHONY : help
 
 
