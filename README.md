@@ -16,7 +16,7 @@ sudo apt-get install cmake
 
 #### Boost
 
-Boost is a dependancy of assimp, and is used for multithreading purposes. Assimp will not compile correctly without it.
+Boost is a dependency of assimp, and is used for multithreading purposes. Assimp will not compile correctly without it.
 
 ```
 sudo apt-get install libboost-all-dev
