@@ -41,6 +41,13 @@ cmake CMakeLists.txt
 sudo make install -j4
 ```
 
+#### GLEW
+
+```
+sudo apt-get install libglew-dev
+```
+
+
 All of the other required headers are located in the include directory.
 
 ### Installing
