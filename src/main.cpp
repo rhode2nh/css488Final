@@ -100,7 +100,7 @@ int main() {
 
     // Shader configuration
     portalShader.use();
-    portalShader.setInt("screenTexture", 0);
+    portalShader.setInt("portalTexture", 0);
     portalShader.setVec2("uv", uv);
 
     playerShader.use();
