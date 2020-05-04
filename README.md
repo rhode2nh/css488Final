@@ -1,10 +1,10 @@
-# CS488 Final
+# CS488 Final Portal Project
 
-One Paragraph of project description goes here
+This is my final project for CS488 - Computer Graphics. It is a small program that simulates non-euclidean geometry with the use of portals.
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+These instructions will show you how to get this project up and running on your machine. **This has only been tested in Linux Mint.**
 
 ### Prerequisites
 
@@ -45,45 +45,31 @@ All of the other required headers are located in the include directory.
 
 ### Installing
 
-A step by step series of examples that tell you how to get a development env running
-
-Say what the step will be
+Clone the repository:
 
 ```
-Give the example
+git clone https://github.com/rhode2nh/css488Final.git
 ```
 
-And repeat
+Then, go into the build directory, create a new directory and run cmake:
 
 ```
-until finished
+cd build
+mkdir example
+cmake ../../
 ```
 
-End with an example of getting some data out of the system or using it for a little demo
-
-## Running the tests
-
-Explain how to run the automated tests for this system
-
-### Break down into end to end tests
-
-Explain what these tests test and why
+Run the binary:
 
 ```
-Give an example
+./final
 ```
 
-### And coding style tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
 
 ## Acknowledgments
 
-* Hat tip to anyone whose code was used
-* Inspiration
-* etc
-
+* Credit to Gerzi 3D Art for the model: https://www.turbosquid.com/FullPreview/Index.cfm/ID/464428
+* Inspiration:
+  - Portal By Valve: https://store.steampowered.com/app/400/Portal/
+  - Sebastian Lague: https://www.youtube.com/watch?v=cWpFZbjtSQg
+  - Professor Bernstein: https://users.cs.jmu.edu/bernstdh/Web/?_ga=2.29241532.1490873841.1588529661-940155904.1579021428
