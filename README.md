@@ -1,5 +1,5 @@
 # CS488 Final Project
-![](example.gif)
+![](example1.gif)
 
 This is my final project for CS488 - Computer Graphics. It is a small program that simulates non-euclidean geometry with the use of portals.
 
