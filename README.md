@@ -5,7 +5,7 @@ This is my final project for CS488 - Computer Graphics. It is a small program th
 
 ## Getting Started
 
-These instructions will show you how to get this project up and running on your machine. **This has only been tested in a Linux Mint environment.**
+These instructions will show you how to get this project up and running on your machine. **This has only been tested in a Ubuntu/Linux Mint environment.**
 
 ### Prerequisites
 
